@@ -1,25 +1,35 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Home from './components/home/Home';
+import Login from './components/auth/Login';
+import NewAccount from './components/auth/NewAccount';
+import Payments from './components/payments/Payments';
+
+import 'fontsource-roboto';
+/*
+import { Button } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/core/styles';
+import theme from './themeConfig';
+*/
+
 
 function App() {
+
+  console.log(process.env.REACT_APP_BACKEND_URL);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    /*<ThemeProvider theme={theme}>
+      <Button variant="contained" color="primary" >
+        Hello
+      </Button>
+    </ThemeProvider>*/
+    <Router>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/iniciar-sesion" component={Login} />
+        <Route exact path="/registro" component={NewAccount} />
+        <Route exact path="/pagos" component={Payments} />
+      </Switch>
+    </Router>
   );
 }
 
