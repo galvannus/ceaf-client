@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 import { Grid, FormGroup, Box, FormControl, InputLabel, Input, FormHelperText, Button } from '@material-ui/core';
 
+import AuthContext from '../../context/authentication/authContext';
+
+
 const NewAccount = () => {
 
-    //Login State
+    const authContext = useContext(AuthContext);
+    const { registryUser } = authContext;
+
+    //State for login
     const [user, saveUser] = useState({
         name: '',
         email: '',
@@ -33,6 +39,11 @@ const NewAccount = () => {
         //Validate 2 passwords are equals
 
         //Send to action
+        registryUser({
+            name,
+            email,
+            password
+        });
     }
 
     return(
@@ -99,7 +110,7 @@ const NewAccount = () => {
 
                                 <br/>
                                 
-                                <Button variant="outlined" color="primary">
+                                <Button type="submit" variant="outlined" color="primary">
                                     Registrar
                                 </Button>
                             </FormGroup>

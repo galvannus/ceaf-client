@@ -1,0 +1,7 @@
+
+export const REGISTRY_SUCCESS = 'REGISTRY_SUCCESS';
+export const REGISTRY_ERROR = 'REGISTRY_ERROR';
+export const GET_USER = 'GET_USER';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_ERROR = 'LOGIN_ERROR';
+export const CLOSE_SESION = 'CLOSE_SESION';

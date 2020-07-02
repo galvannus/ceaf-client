@@ -1,8 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 
 import { Grid, FormGroup, Box, FormControl, InputLabel, Input, FormHelperText, Button } from '@material-ui/core';
 
-const Login = () => {
+import AuthContext from '../../context/authentication/authContext';
+
+const Login = (props) => {
+
+    const authContext = useContext(AuthContext);
+    const { authenticated, logIn } = authContext;
+
+    //In case of the password or user dont exist
+    useEffect(() => {
+        if(authenticated) {
+            props.history.push('/pagos');
+        }
+
+    }, [authenticated, props.history]);
 
     //Login State
     const [user, saveUser] = useState({
@@ -25,8 +38,12 @@ const Login = () => {
         e.preventDefault();
 
         //Validation of empty fields
+        if(email.trim() === '' || password.trim() === '') {
+            console.log('Todos los campos son obligatorios');
+        }
 
         //Send to action
+        logIn({ email, password});
     }
 
     return(
@@ -70,7 +87,7 @@ const Login = () => {
 
                                 <br/>
                                 
-                                <Button variant="outlined" color="primary">
+                                <Button type="submit" variant="outlined" color="primary">
                                     Iniciar Sesión
                                 </Button>
                             </FormGroup>

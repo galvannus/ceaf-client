@@ -1,39 +1,51 @@
-import React, {useState} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 
 import { Grid, FormGroup, Box, FormControl, InputLabel, Input, Button } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
+import AuthContext from '../../context/authentication/authContext';
+
 const Payments = () => {
+
+    //Extract the authentication data
+    const authContext = useContext(AuthContext);
+    const { userAuthenticated } = authContext;
+
+    useEffect(() => {
+        userAuthenticated();
+        //eslint-disable-next-line
+    }, [])
+
 
     const [payment, setPayment] = useState({
         name: '',
         receiptId: '',
         fieldPrice: [
             {
-                price: ''
+                price: '',
+                concept: ''
             }
         ]
     });
 
     const onChange = (e, index) => {
-
         if(e.target.name === "name" || e.target.name === "receiptId"){
             setPayment({
                 ...payment,
                 [e.target.name] : e.target.value
             });
-           
         } else {
             const listFields = [...payment.fieldPrice];
             listFields[index][e.target.name] = e.target.value;
 
             setPayment({
+                ...payment,
                 fieldPrice: listFields
             });
+            
         }
-        
     }
 
     const createAndDownloadPdf = () => {
@@ -52,6 +64,7 @@ const Payments = () => {
     const addInput = () => {
         const newField = {price: ''};
         setPayment({
+            ...payment,
             fieldPrice: [...payment.fieldPrice, newField]
         });
     }
@@ -63,7 +76,7 @@ const Payments = () => {
                 <Grid item xs={4}>
 
                     <Box display="flex" justifyContent="center">
-                        Pago
+                        Pagos
                     </Box>
 
                     <Box>
@@ -81,7 +94,7 @@ const Payments = () => {
                                 </FormControl>
                                 
                                 <FormControl>
-                                    <InputLabel htmlFor="my-input">ID</InputLabel>
+                                    <InputLabel htmlFor="my-input">Folio</InputLabel>
                                     <Input 
                                         id="receiptId"
                                         type="number"
@@ -90,10 +103,22 @@ const Payments = () => {
                                         onChange={onChange}
                                     />
                                 </FormControl>
+
                                 {payment.fieldPrice.map(( item, i ) => {
                                     return(
                                         <Grid key={i} container direction="row" justify="center" alignItems="center">
                                             <Grid item xs={11}>
+                                                <FormControl>
+                                                    <InputLabel htmlFor="my-input">Concepto {i+1}</InputLabel>
+                                                    <Input 
+                                                        id="concept"
+                                                        type="text"
+                                                        name="concept"
+                                                        aria-describedby="my-helper-text"
+                                                        onChange={e => onChange(e, i)}
+                                                        value={item.concept}
+                                                    />
+                                                </FormControl>
                                                 <FormControl>
                                                     <InputLabel htmlFor="my-input">Importe {i+1}</InputLabel>
                                                     <Input 
@@ -105,6 +130,7 @@ const Payments = () => {
                                                         value={item.price}
                                                     />
                                                 </FormControl>
+                                                
                                             </Grid>
                                             {
                                                 payment.fieldPrice.length -1 === i && <Grid item xs={1}>
@@ -123,7 +149,8 @@ const Payments = () => {
                                             }
                                         </Grid>
                                     );
-                                })}
+                                })
+                                }
 
                                 
                                 <br/>
@@ -139,9 +166,7 @@ const Payments = () => {
                 </Grid>
                 <Grid item xs={4}></Grid>
             </Grid>
-            <pre>
-                {JSON.stringify(payment.fieldPrice, null, 2)}
-            </pre>
+            
         </div>
         
     );
