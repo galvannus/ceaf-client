@@ -44,11 +44,11 @@ const Payments = () => {
                 ...payment,
                 fieldPrice: listFields
             });
-            
         }
     }
 
     const createAndDownloadPdf = () => {
+        console.log(process.env.REACT_APP_BACKEND_URL);
         axios.post(`${process.env.REACT_APP_BACKEND_URL}/create-pdf`, payment)
             .then(() => axios.get(`${process.env.REACT_APP_BACKEND_URL}/fetch-pdf`, { responseType: 'blob' }))
             .then((res) => {
